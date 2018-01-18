@@ -1,3 +1,3 @@
 # clear files
 
-tb_test -n "Clear backup files" rm -rf "$testdir"
+tb_test -n "Clear all files" rm -rf "$testdir"

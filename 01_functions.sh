@@ -90,7 +90,7 @@ test_t2b() {
 
 	# after label, get options
 	shift
-	while [ -n "$1" ] ; do
+	while [ $# -gt 0 ] ; do
 		cmd+=("$1")
 		shift
 	done
@@ -116,15 +116,16 @@ file_checksum() {
 
 
 # Check file content
-# Usage: test_file CHECKSUM PATH
+# Usage: test_file CONFIG CHECKSUM PATH
 test_file() {
 
-	if [ $# -lt 2 ] ; then
+	if [ $# -lt 3 ] ; then
 		return 1
 	fi
 
-	checksum=$1
-	shift
+	local config=$1
+	local checksum=$2
+	shift 2
 
-	tb_test -r "$checksum" -n "File checksum" file_checksum "$*"
+	tb_test -r "$checksum" -n "$config: File checksum" file_checksum "$*"
 }

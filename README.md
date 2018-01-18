@@ -5,8 +5,8 @@ Unit tests for the [time2backup](https://time2backup.github.io) project.
 Some tests failed? Help us to improve time2backup and [report a bug here](https://github.com/time2backup/time2backup/issues)!
 
 ## Usage
-1. Clone testbash project: [https://github.com/pruje/testbash.git](https://github.com/pruje/testbash.git)
-2. Clone time2backup project: [https://github.com/time2backup/time2backup.git](https://github.com/time2backup/time2backup.git)
+1. Clone [testbash project](https://github.com/pruje/testbash.git) and init submodules
+2. Clone [time2backup project](https://github.com/time2backup/time2backup.git) ASIDE testbash and init submodules
 3. Create a subdirectory named `tests/` into testbash and clone this repository into it, or create symlinks that points to this repository
 4. Go into the testbash directory and run the following command:
 ```bash

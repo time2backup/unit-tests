@@ -2,8 +2,8 @@
 
 # time2backup options
 
-# console mode
-console_mode=false
+# console mode (hide popup dialogs)
+console_mode=true
 
 # debug mode
 debug_mode=false
