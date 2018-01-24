@@ -1,6 +1,6 @@
 # time2backup unit tests
 
-Unit tests for the [time2backup](https://time2backup.github.io) project.
+Unit tests for the [time2backup](https://time2backup.org) project.
 
 Some tests failed? Help us to improve time2backup and [report a bug here](https://github.com/time2backup/time2backup/issues)!
 
