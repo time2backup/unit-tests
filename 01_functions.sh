@@ -69,16 +69,35 @@ load_config() {
 	fi
 
 	# defines time2backup command
-	time2backup+=(-c "$testconfig")
+	time2backup_cmd=("$time2backup" -c "$testconfig")
 }
 
 
 # Run a time2backup test
-# Usage: test_t2b LABEL [T2B OPTIONS]
+# Usage: test_t2b [OPTION] LABEL [T2B OPTIONS]
 test_t2b() {
 
-	cmd=(tb_test -n "$1" -i)
-	cmd+=("${time2backup[@]}")
+	local cmd=(tb_test -i)
+
+	while [ $# -gt 0 ] ; do
+		case $1 in
+			-c)
+				cmd+=(-c "$2")
+				shift
+				;;
+			-r)
+				cmd+=(-r "$2")
+				shift
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
+	cmd+=(-n "$1")
+	cmd+=("${time2backup_cmd[@]}")
 
 	if $console_mode ; then
 		cmd+=(-C)
