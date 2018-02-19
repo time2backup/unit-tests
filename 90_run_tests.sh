@@ -20,7 +20,7 @@ for dir in "$config_directory/good/"* ; do
 	tb_test -n "$d: Load config" -i load_config "good/$d" || continue
 
 	# test usage errors
-	test_t2b -c 1 "$d: History usage error" history
+	test_t2b -c 1 "$d: History usage error" history &> /dev/null
 
 	# run tests
 	test_backup $d && \

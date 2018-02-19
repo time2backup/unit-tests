@@ -16,5 +16,9 @@ function test_backup() {
 
 	cmd+=(backup)
 
+	if $quiet_mode ; then
+		cmd+=(-q)
+	fi
+
 	"${cmd[@]}"
 }

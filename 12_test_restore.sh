@@ -15,7 +15,13 @@ function test_restore() {
 		shift
 	done
 
-	cmd+=(restore -f "$file111")
+	cmd+=(restore -f)
+
+	if $quiet_mode ; then
+		cmd+=(-q)
+	fi
+
+	cmd+=("$file111")
 
 	# save file checksum
 	file111_checksum=$(file_checksum "$file111")
