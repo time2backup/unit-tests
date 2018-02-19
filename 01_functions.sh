@@ -1,30 +1,30 @@
 # Functions
 
 # Get real path of a file/directory
-# Usage: lb_realpath PATH
-lb_realpath() {
+# Usage: get_realpath PATH
+get_realpath() {
 
 	# test if path exists
 	if ! [ -e "$1" ] ; then
 		return 1
 	fi
 
-	if [ "$lb_current_os" == "macOS" ] ; then
+	if [ "$(uname)" == Darwin ] ; then
 		# macOS does not support readlink -f option
 		perl -e 'use Cwd "abs_path";print abs_path(shift)' "$1"
 	else
 		# Linux & Windows
-
-		if [ "$lb_current_os" == "Windows" ] ; then
+		local path
+		if [[ "$(uname)" == CYGWIN* ]] ; then
 			# convert windows paths (C:\dir\file -> /cygdrive/c/dir/file)
 			# then we will find real path
-			lb_realpath_path=$(cygpath "$1")
+			path=$(cygpath "$1")
 		else
-			lb_realpath_path=$1
+			path=$1
 		fi
 
 		# find real path
-		readlink -f "$lb_realpath_path" 2> /dev/null
+		readlink -f "$path" 2> /dev/null
 	fi
 
 	# error
