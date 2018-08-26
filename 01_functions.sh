@@ -3,11 +3,8 @@
 # Get real path of a file/directory
 # Usage: get_realpath PATH
 get_realpath() {
-
 	# test if path exists
-	if ! [ -e "$1" ] ; then
-		return 1
-	fi
+	[ -e "$1" ] || return 1
 
 	if [ "$(uname)" == Darwin ] ; then
 		# macOS does not support readlink -f option
@@ -27,46 +24,27 @@ get_realpath() {
 		readlink -f "$path" 2> /dev/null
 	fi
 
-	# error
-	if [ $? != 0 ] ; then
-		return 2
-	fi
+	[ $? == 0 ] || return 2
 }
 
 
 # change time2backup command to load custom config
 load_config() {
-
-	if [ $# == 0 ] ; then
-		return 1
-	fi
+	[ $# == 0 ] && return 1
 
 	testconfig="$config_directory/$*"
 
 	# error if config does not exists
-	if ! [ -d "$testconfig" ] ; then
-		return 2
-	fi
+	[ -d "$testconfig" ] || return 2
 
 	# create sources file
 	echo "$src" > "$testconfig/sources.conf"
-	if [ $? != 0 ] ; then
-		return 3
-	fi
+	[ $? != 0 ] && return 3
 
 	cp "$testconfig/time2backup.default.conf" "$testconfig/time2backup.conf"
-	if [ $? != 0 ] ; then
-		return 3
-	fi
+	[ $? != 0 ] && return 3
 
-	# erase destination config
-	conf_dest=$(echo "$dest" | sed 's/\//\\\//g')
-
-	sed -i~ "s/^[# ]*destination = /destination=\"$conf_dest\"/" "$testconfig/time2backup.conf"
-
-	if [ $? != 0 ] ; then
-		return 3
-	fi
+	lb_set_config "$testconfig/time2backup.conf" destination "\"$dest\"" || return 3
 
 	# defines time2backup command
 	time2backup_cmd=("$time2backup" -c "$testconfig")
@@ -76,7 +54,6 @@ load_config() {
 # Run a time2backup test
 # Usage: test_t2b [OPTION] LABEL [T2B OPTIONS]
 test_t2b() {
-
 	local cmd=(tb_test -i)
 
 	while [ $# -gt 0 ] ; do
@@ -96,16 +73,10 @@ test_t2b() {
 		shift
 	done
 
-	cmd+=(-n "$1")
-	cmd+=("${time2backup_cmd[@]}")
+	cmd+=(-n "$1" "${time2backup_cmd[@]}")
 
-	if $console_mode ; then
-		cmd+=(-C)
-	fi
-
-	if $debug_mode ; then
-		cmd+=(-D)
-	fi
+	$console_mode && cmd+=(-C)
+	$debug_mode && cmd+=(-D)
 
 	# after label, get options
 	shift
@@ -114,7 +85,6 @@ test_t2b() {
 		shift
 	done
 
-	# run test
 	"${cmd[@]}"
 }
 
@@ -122,28 +92,19 @@ test_t2b() {
 # Get file checksum
 # Usage: get_file_checksum PATH
 file_checksum() {
-
-	if ! [ -e "$*" ] ; then
-		return 1
-	fi
+	[ -e "$*" ] || return 1
 
 	md5sum "$*" 2> /dev/null | awk '{print $1}'
-	if [ ${PIPESTATUS[0]} != 0 ] ; then
-		return 1
-	fi
+	[ ${PIPESTATUS[0]} == 0 ] || return 1
 }
 
 
 # Check file content
 # Usage: test_file CONFIG CHECKSUM PATH
 test_file() {
+	[ $# -lt 3 ] && return 1
 
-	if [ $# -lt 3 ] ; then
-		return 1
-	fi
-
-	local config=$1
-	local checksum=$2
+	local config=$1 checksum=$2
 	shift 2
 
 	tb_test -r "$checksum" -n "$config: File checksum" file_checksum "$*"

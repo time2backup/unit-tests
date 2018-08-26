@@ -1,19 +1,15 @@
 # Init: set environment
 
 # tests directory (named with spaces, to test if compatible)
-testdir="$(get_realpath "$curdir")/t2b test files"
+testdir=$(get_realpath "$curdir")/"t2b test files"
 
 src=$testdir/src
 dest=$testdir/dest
 
 # create source directory
-tb_test -n "Create source test directory" mkdir -p "$src"
-if [ $? != 0 ] ; then
-  return 1
-fi
-
+tb_test -n "Create source test directory" mkdir -p "$src" || return 1
 # create backup destination
-tb_test -n "Create destination test directory" mkdir -p "$dest"
+tb_test -n "Create destination test directory" mkdir -p "$dest" || return 1
 
 # create source files
 # details:

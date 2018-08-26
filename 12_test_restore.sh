@@ -1,11 +1,9 @@
 # Test restore
 # Usage: test_restore CONFIG
 function test_restore() {
-
 	local cmd=(test_t2b)
 
 	while [ $# -gt 0 ] ; do
-
 		if [ $# -gt 1 ] ; then
 			cmd+=("$1")
 		else
@@ -17,9 +15,7 @@ function test_restore() {
 
 	cmd+=(restore -f)
 
-	if $quiet_mode ; then
-		cmd+=(-q)
-	fi
+	$quiet_mode && cmd+=(-q)
 
 	cmd+=("$file111")
 

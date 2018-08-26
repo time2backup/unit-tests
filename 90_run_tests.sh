@@ -2,7 +2,6 @@
 
 # parse every config
 for dir in "$config_directory/good/"* ; do
-
 	# get directory name
 	d=$(basename "$dir")
 
