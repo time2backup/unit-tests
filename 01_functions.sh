@@ -30,6 +30,20 @@ get_realpath() {
 
 # change time2backup command to load custom config
 load_config() {
+	local set_destination=false
+
+	while [ $# -gt 0 ] ; do
+		case $1 in
+			-d)
+				set_destination=true
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
 	[ $# == 0 ] && return 1
 
 	testconfig="$config_directory/$*"
@@ -44,7 +58,9 @@ load_config() {
 	cp "$testconfig/time2backup.default.conf" "$testconfig/time2backup.conf"
 	[ $? != 0 ] && return 3
 
-	lb_set_config "$testconfig/time2backup.conf" destination "\"$dest\"" || return 3
+	if $set_destination ; then
+		lb_set_config "$testconfig/time2backup.conf" destination "\"$dest\"" || return 3
+	fi
 
 	# defines time2backup command
 	time2backup_cmd=("$time2backup" -c "$testconfig")

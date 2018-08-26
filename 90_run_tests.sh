@@ -16,7 +16,7 @@ for dir in "$config_directory/good/"* ; do
 	echo
 
 	# load config; if error, quit
-	tb_test -n "$d: Load config" -i load_config "good/$d" || continue
+	tb_test -n "$d: Load config" -i load_config -d "good/$d" || continue
 
 	# test usage errors
 	test_t2b -c 1 "$d: History usage error" history &> /dev/null
