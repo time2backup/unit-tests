@@ -26,7 +26,7 @@ for dir in "$config_directory/good/"* ; do
 	test_history $d && \
 	test_restore $d
 	test_mv $d
-	#test_clear $d
+	test_clean $d
 
 	# clear backup files
 	tb_test -n "$d: Clear backup files" rm -rf "$dest"/*
