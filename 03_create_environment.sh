@@ -10,6 +10,8 @@ dest=$testdir/dest
 tb_test -n "Create source test directory" mkdir -p "$src" || return 1
 # create backup destination
 tb_test -n "Create destination test directory" mkdir -p "$dest" || return 1
+# create export destination
+tb_test -n "Create export test directory" mkdir -p "$testdir"/dest2 || return 1
 
 # create source files
 #   /
