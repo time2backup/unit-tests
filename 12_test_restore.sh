@@ -27,4 +27,12 @@ function test_restore() {
 	tb_test -n "$label: Update file111" [ $? == 0 ] && \
 	"${cmd[@]}" && \
 	test_file "$file111_checksum" "$file111"
+
+	# test restore to another destination
+	local other_restored=$(dirname "$file111")/restored
+
+	cmd+=("$other_restored")
+
+	"${cmd[@]}" && \
+	test_file -n "Restored file to another path" "$file111_checksum" "$other_restored"
 }
