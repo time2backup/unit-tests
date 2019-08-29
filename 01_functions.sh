@@ -59,7 +59,7 @@ load_config() {
 	[ $? != 0 ] && return 3
 
 	if $set_destination ; then
-		lb_set_config "$testconfig/time2backup.conf" destination "\"$dest\"" || return 3
+		lb_set_config "$testconfig/time2backup.conf" destination "$dest" || return 3
 	fi
 
 	# defines time2backup command

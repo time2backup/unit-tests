@@ -34,5 +34,5 @@ function test_restore() {
 	cmd+=("$other_restored")
 
 	"${cmd[@]}" && \
-	test_file -n "Restored file to another path" "$file111_checksum" "$other_restored"
+	test_file "$file111_checksum" "$other_restored"
 }
