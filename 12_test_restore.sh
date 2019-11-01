@@ -1,19 +1,8 @@
 # Test restore
-# Usage: test_restore CONFIG
+# Usage: test_restore [OPTIONS]
+# Dependencies: $conf
 function test_restore() {
-	local cmd=(test_t2b)
-
-	while [ $# -gt 0 ] ; do
-		if [ $# -gt 1 ] ; then
-			cmd+=("$1")
-		else
-			local label=$1
-			cmd+=("$1: Restore file111")
-		fi
-		shift
-	done
-
-	cmd+=(restore -f)
+	local cmd=(test_t2b "$@" "$conf: Restore file111" restore -f)
 
 	$quiet_mode && cmd+=(-q)
 

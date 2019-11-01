@@ -30,36 +30,24 @@ get_realpath() {
 
 # change time2backup command to load custom config
 load_config() {
-	local set_destination=false
-
-	while [ $# -gt 0 ] ; do
-		case $1 in
-			-d)
-				set_destination=true
-				;;
-			*)
-				break
-				;;
-		esac
-		shift
-	done
-
 	[ $# == 0 ] && return 1
 
-	testconfig="$config_directory/$*"
+	testconfig=$config_directory/$*
 
 	# error if config does not exists
 	[ -d "$testconfig" ] || return 2
 
 	# create sources file
-	echo "$src" > "$testconfig/sources.conf"
+	echo "$src" > "$testconfig"/sources.conf
 	[ $? != 0 ] && return 3
 
-	cp "$testconfig/time2backup.default.conf" "$testconfig/time2backup.conf"
+	echo "# time2backup configuration file v1.6.0" > "$testconfig"/time2backup.conf && \
+	cat "$testconfig"/time2backup.default.conf >> "$testconfig"/time2backup.conf
 	[ $? != 0 ] && return 3
 
-	if $set_destination ; then
-		lb_set_config "$testconfig/time2backup.conf" destination "$dest" || return 3
+	# if destination not set, set it
+	if [ -z "$(lb_get_config "$testconfig"/time2backup.conf destination)" ] ; then
+		lb_set_config "$testconfig"/time2backup.conf destination "$dest" || return 3
 	fi
 
 	# defines time2backup command
@@ -70,16 +58,16 @@ load_config() {
 # Run a time2backup test
 # Usage: test_t2b [OPTION] LABEL [T2B OPTIONS]
 test_t2b() {
-	local cmd=(tb_test -i)
+	local opts=()
 
 	while [ $# -gt 0 ] ; do
 		case $1 in
 			-c)
-				cmd+=(-c "$2")
+				opts+=(-c "$2")
 				shift
 				;;
 			-r)
-				cmd+=(-r "$2")
+				opts+=(-r "$2")
 				shift
 				;;
 			*)
@@ -89,19 +77,13 @@ test_t2b() {
 		shift
 	done
 
-	cmd+=(-n "$1" "${time2backup_cmd[@]}")
-
-	$console_mode && cmd+=(-C)
-	$debug_mode && cmd+=(-D)
-
-	# after label, get options
+	opts+=(-n "$1" "${time2backup_cmd[@]}")
 	shift
-	while [ $# -gt 0 ] ; do
-		cmd+=("$1")
-		shift
-	done
 
-	"${cmd[@]}"
+	$console_mode && opts+=(-C)
+	$debug_mode && opts+=(-D)
+
+	tb_test -i "${opts[@]}" "$@"
 }
 
 

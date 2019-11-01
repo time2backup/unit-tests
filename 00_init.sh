@@ -6,11 +6,11 @@ time2backup=$t2b_path/time2backup.sh
 time2backup_cmd=()
 
 # load libbash
-source "$t2b_path/libbash/libbash.sh" || return 1
+source "$t2b_path"/libbash/libbash.sh - || return 1
 
 # test if time2backup is loaded as dependency
-tb_test -n "Test if time2backup is loaded" -r "time2backup.sh" basename "$time2backup"
+tb_test -n "Test if time2backup is loaded" -r time2backup.sh basename "$time2backup"
 [ $? != 0 ] && return 1
 
 curdir=$(dirname "$BASH_SOURCE")
-config_directory="$curdir/config"
+config_directory=$curdir/config
