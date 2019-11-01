@@ -4,14 +4,14 @@
 function test_restore() {
 	local cmd=(test_t2b "$@" "$conf: Restore file111" restore -f)
 
-	$quiet_mode && cmd+=(-q)
+	lb_istrue $quiet_mode && cmd+=(-q)
 
 	cmd+=("$file111")
 
 	# save file checksum
 	file111_checksum=$(file_checksum "$file111")
 
-	# change content, restore then check integrity
+	# change content, restore file then check integrity
 	echo newcontent > "$file111"
 	tb_test -n "$label: Update file111" [ $? == 0 ] && \
 	"${cmd[@]}" && \

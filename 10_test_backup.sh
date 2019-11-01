@@ -3,7 +3,7 @@
 # Dependencies: $conf
 function test_backup() {
 	local opts=()
-	$quiet_mode && opts+=(-q)
+	lb_istrue $quiet_mode && opts+=(-q)
 
 	test_t2b "$@" "$conf: Backup" backup "${opts[@]}"
 }

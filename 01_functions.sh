@@ -32,7 +32,7 @@ get_realpath() {
 load_config() {
 	[ $# == 0 ] && return 1
 
-	testconfig=$config_directory/$*
+	local testconfig=$config_directory/$*
 
 	# error if config does not exists
 	[ -d "$testconfig" ] || return 2
@@ -41,7 +41,7 @@ load_config() {
 	echo "$src" > "$testconfig"/sources.conf
 	[ $? != 0 ] && return 3
 
-	echo "# time2backup configuration file v1.6.0" > "$testconfig"/time2backup.conf && \
+	echo "# time2backup configuration file v$config_version" > "$testconfig"/time2backup.conf && \
 	cat "$testconfig"/time2backup.default.conf >> "$testconfig"/time2backup.conf
 	[ $? != 0 ] && return 3
 
@@ -80,8 +80,8 @@ test_t2b() {
 	opts+=(-n "$1" "${time2backup_cmd[@]}")
 	shift
 
-	$console_mode && opts+=(-C)
-	$debug_mode && opts+=(-D)
+	lb_istrue $console_mode && opts+=(-C)
+	lb_istrue $debug_mode && opts+=(-D)
 
 	tb_test -i "${opts[@]}" "$@"
 }
