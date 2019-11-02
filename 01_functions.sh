@@ -1,33 +1,5 @@
 # Functions
 
-# Get real path of a file/directory
-# Usage: get_realpath PATH
-get_realpath() {
-	# test if path exists
-	[ -e "$1" ] || return 1
-
-	if [ "$(uname)" == Darwin ] ; then
-		# macOS does not support readlink -f option
-		perl -e 'use Cwd "abs_path";print abs_path(shift)' "$1"
-	else
-		# Linux & Windows
-		local path
-		if [[ "$(uname)" == CYGWIN* ]] ; then
-			# convert windows paths (C:\dir\file -> /cygdrive/c/dir/file)
-			# then we will find real path
-			path=$(cygpath "$1")
-		else
-			path=$1
-		fi
-
-		# find real path
-		readlink -f "$path" 2> /dev/null
-	fi
-
-	[ $? == 0 ] || return 2
-}
-
-
 # change time2backup command to load custom config
 load_config() {
 	[ $# == 0 ] && return 1
@@ -49,9 +21,6 @@ load_config() {
 	if [ -z "$(lb_get_config "$testconfig"/time2backup.conf destination)" ] ; then
 		lb_set_config "$testconfig"/time2backup.conf destination "$dest" || return 3
 	fi
-
-	# defines time2backup command
-	time2backup_cmd=("$time2backup" -c "$testconfig")
 }
 
 
@@ -77,7 +46,7 @@ test_t2b() {
 		shift
 	done
 
-	opts+=(-n "$1" "${time2backup_cmd[@]}")
+	opts+=(-n "$1" "$t2b_path/time2backup.sh" -c "$config_directory/$conf")
 	shift
 
 	lb_istrue $console_mode && opts+=(-C)

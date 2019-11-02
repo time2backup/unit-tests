@@ -1,8 +1,5 @@
 # Init: set environment
 
-# tests directory (named with spaces, to test if compatible)
-testdir=$(get_realpath "$curdir")/"t2b test files"
-
 src=$testdir/src
 dest=$testdir/dest
 
