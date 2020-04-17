@@ -5,6 +5,9 @@ for dir in "$config_directory"/* ; do
 	# get directory name
 	conf=$(basename "$dir")
 
+	# reset variables
+	clone_mode=false
+
 	# load config
 	if ! [ -d "$config_directory/$conf" ] ; then
 		tb_test -n "$conf: Load config" false
@@ -17,9 +20,6 @@ for dir in "$config_directory"/* ; do
 
 	# load config; if error, quit
 	tb_test -n "$conf: Load config" -i load_config $conf || continue
-
-	# test usage errors
-	test_t2b -c 1 "$conf: Usage error" history &> /dev/null
 
 	# load expected results config
 	if [ -f "$config_directory/$conf/tests.conf" ] ; then

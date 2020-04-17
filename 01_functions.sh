@@ -77,3 +77,17 @@ test_file() {
 
 	tb_test -r "$checksum" -n "$config: File checksum $*" file_checksum "$*"
 }
+
+
+# Analyse args
+# Usage: expected_code ARGS
+expected_code() {
+	while [ $# -gt 0 ] ; do
+		case $1 in
+			-c|--exit-code)
+				return $2
+				;;
+		esac
+		shift
+	done
+}
