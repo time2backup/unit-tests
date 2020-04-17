@@ -57,22 +57,23 @@ test_t2b() {
 
 
 # Get file checksum
-# Usage: get_file_checksum PATH
+# Usage: file_checksum PATH
 file_checksum() {
-	[ -e "$*" ] || return 1
+	if lb_command_exists md5sum ; then
+		md5sum "$*" | awk '{print $1}'
+	else
+		md5 -r "$*" | awk '{print $1}'
+	fi
 
-	md5sum "$*" 2> /dev/null | awk '{print $1}'
-	[ ${PIPESTATUS[0]} == 0 ] || return 1
+	return ${PIPESTATUS[0]}
 }
 
 
 # Check file content
 # Usage: test_file CONFIG CHECKSUM PATH
 test_file() {
-	[ $# -lt 3 ] && return 1
-
 	local config=$1 checksum=$2
 	shift 2
 
-	tb_test -r "$checksum" -n "$config: File checksum" file_checksum "$*"
+	tb_test -r "$checksum" -n "$config: File checksum $*" file_checksum "$*"
 }

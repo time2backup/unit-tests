@@ -13,15 +13,13 @@ function test_restore() {
 
 	# change content, restore file then check integrity
 	echo newcontent > "$file111"
-	tb_test -n "$label: Update file111" [ $? == 0 ] && \
+	tb_test -n "$conf: Update file111" [ $? == 0 ] && \
 	"${cmd[@]}" && \
-	test_file "$file111_checksum" "$file111"
+	test_file "$conf" "$file111_checksum" "$file111"
 
 	# test restore to another destination
-	local other_restored=$(dirname "$file111")/restored
+	local other_restore=$dir1/new/path/to/restore
 
-	cmd+=("$other_restored")
-
-	"${cmd[@]}" && \
-	test_file "$file111_checksum" "$other_restored"
+	"${cmd[@]}" "$other_restore" && \
+	test_file "$conf" "$file111_checksum" "$other_restore"
 }
