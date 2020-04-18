@@ -14,7 +14,7 @@ config_directory=$curdir/config
 testdir="$(lb_realpath "$curdir")/t2b test files"
 
 # time2backup config version
-config_version=1.6.2
+config_version=1.8.0
 
 # time2backup default options
 console_mode=true
