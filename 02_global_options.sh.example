@@ -1,7 +1,7 @@
 # time2backup options
 
-# custom time2backup path
-#t2b_path=
+# time2backup directory path (MANDATORY)
+t2b_path=
 
 # console mode (hide popup dialogs)
 console_mode=true
